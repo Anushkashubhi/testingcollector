@@ -1,3 +1,6 @@
+import groovy.json.JsonSlurper
+
+@NonCPS
 def call(){
 sh '''
 curl -X GET \
