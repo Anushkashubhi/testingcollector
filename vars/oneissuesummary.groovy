@@ -1,13 +1,19 @@
-import groovy.json.JsonSlurper
+import groovy.json.JsonSlurper 
 
 @NonCPS
+collectissuesummary(String data){
+def jsonSlurper = new JsonSlurper() 
+def resultJson = jsonSlurper.parseText(data)
+def issueName = resultJson.key
+echo "$issueName"
+ httpRequest authentication: 'jira_password',
+  customHeaders: [[maskValue: false, name: 'Accept', value: 'application/json']], 
+     httpMode: 'GET', url:"http://ec2-18-191-16-16.us-east-2.compute.amazonaws.com:8080/rest/api/2/search?jql=issue%3D${issueName}&fields=key%2Csummary%2Cdescription&maxResults=1000&startAt=0"
+
+}
+
+
 def call(){
-sh '''
-curl -X GET \
-  'http://ec2-18-191-16-16.us-east-2.compute.amazonaws.com:8080/rest/api/2/search?jql=issue%3DAVR-4&fields=key%2Csummary%2Cdescription&maxResults=1000&startAt=0' \
-  -H 'accept: application/json' \
-  -H 'authorization: Basic cmlnOmRpZ2l0YWxyaWdAMTIz' \
-  -H 'cache-control: no-cache' \
-  -H 'postman-token: b7766f9e-b9e5-dd20-b472-c2fda509c590'
-  '''
+ def request = libraryResource 'data.json'
+ collectissuesummary(request)
 }
