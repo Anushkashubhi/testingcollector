@@ -13,4 +13,6 @@ stage('Jenkins job'){
   -H 'postman-token: b7766f9e-b9e5-dd20-b472-c2fda509c590'
  '''
  }
-        }
+ }
+}
+}
